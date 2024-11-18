@@ -21,6 +21,8 @@ const expenses = {
     "2023-04": {},
 };
 
+// 185.62.
+
 function solution1(expenses) {
     result = null;
 
@@ -56,7 +58,6 @@ function solution1(expenses) {
                 }
             }
         }
-
         return sortedArr;
     }
 
@@ -74,6 +75,10 @@ function solution1(expenses) {
         return sumMiddleValues / 2;
     }
 
+    function dayIsInFirstWeek( dayNr, weekDay ){
+        return weekDay+1 - Number(dayNr) >= 0;
+    }
+
     const firstWeeksMonthsTotals = [];
     for (const [month, days] of Object.entries(expenses)) {
         let firstWeekExpensesTotal = 0;
@@ -82,10 +87,12 @@ function solution1(expenses) {
             const fullDate = `${month}-${day}`;
             const weekDay = new Date(fullDate).getDay();
 
-            if (Number(day) > 7) break;
 
+            if (
+                Number(day) > 7 ||
+                !dayIsInFirstWeek( day, weekDay) 
+            ) continue;
             firstWeekExpensesTotal += getTotalExpenses(dayExp);
-            if (weekDay === 0) break;
         }
         
         if (firstWeekExpensesTotal) 
@@ -131,6 +138,10 @@ function solution2(expenses) {
         return sumMiddleValues / 2;
     }
 
+    function dayIsInFirstWeek(dayNr, weekDay) {
+        return weekDay + 1 - Number(dayNr) >= 0;
+    }
+
     const firstWeeksMonthsTotals = [];
     for (const [month, days] of Object.entries(expenses)) {
         let firstWeekExpensesTotal = 0;
@@ -139,9 +150,11 @@ function solution2(expenses) {
             const fullDate = `${month}-${day}`;
             const weekDay = new Date(fullDate).getDay();
 
-            if (Number(day) > 7) break;
+            if (
+                Number(day) > 7 ||
+                !dayIsInFirstWeek( day, weekDay) 
+            ) continue;
             firstWeekExpensesTotal += getTotalExpenses(dayExp);
-            if (weekDay === 0) break;
         }
          if (firstWeekExpensesTotal)
              firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
@@ -152,6 +165,6 @@ function solution2(expenses) {
 }
 
 console.log( 
-    solution1(expenses),
-    solution2( expenses)
+    solution1( expenses),
+    solution2(expenses)
 )

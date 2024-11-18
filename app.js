@@ -26,8 +26,9 @@ function solution1(expenses) {
 
     function getTotalExpenses( dayExpenses ){
         let totalDayExpense = 0;
-        for( const expenseName in dayExpenses){
-            const expensesArr = dayExpenses[expenseName];
+
+        for( const expensesCategoryName in dayExpenses){
+            const expensesArr = dayExpenses[expensesCategoryName];
 
             expensesArr.forEach( e => {
                 totalDayExpense += Number(e);
@@ -36,42 +37,108 @@ function solution1(expenses) {
         return Number( totalDayExpense.toFixed(2) );
     }
 
+    function reversedArrValues( arr ){
+        const reversedArr = []
+
+        for( const el of arr){
+            if (!reversedArr.length) reversedArr.push( el );
+
+            for( const sortedEl of reversedArr){
+                if (sortedEl <= el) continue;
+                else {
+                    reversedArr.push( el );
+                    break
+                }
+            }
+        }
+        return reversedArr
+    }
+
     function getArrMedian( arr ){
-        const sortedArr = arr.sort();
-        
-        if (!arr.lenght) return;
-        if (arr.lenght % 2 !== 0 ) return sortedArr[sortedArr.length / 2];
-        
-        let sumMiddleValues = sortedArr[sortedArr.length / 2] +  sortedArr[sortedArr.length / 2 - 1]
+        const reversedArr = reversedArrValues(arr);
+
+        if (!arr.length) return;
+        console.log( reversedArr)
+        console.log((reversedArr.length-1) / 2 )
+        console.log( reversedArr[(reversedArr.length-1 )/2]) ;
+        if (arr.length % 2 !== 0 ) return reversedArr[(reversedArr.length + 1)/2];
+
+        let sumMiddleValues = reversedArr[reversedArr.length / 2] +  reversedArr[reversedArr.length / 2 - 1]
         return sumMiddleValues / 2
        
     }
 
     const firstWeeksMonthsTotals = [];
-    for (const days of Object.values( expenses)){
-        let firstWeekExpenses = 0;
+    for (const [month,days] of Object.entries( expenses)){
+        let firstWeekExpensesTotal = 0;
 
         for(const [day, dayExp] of Object.entries(days)){
             const fullDate = `${month}-${day}`;
             const weekDay = (new Date(fullDate)).getDay()
 
             if ( Number(day) > 7) break;
-            firstWeekExpenses += getTotalExpenses( dayExp )
-            if ( weekDay == =0) break;
+            firstWeekExpensesTotal += getTotalExpenses( dayExp )
+            if ( weekDay === 0) break;
         }
 
-        firstWeeksMonthsTotals.push( firstWeekExpenses );
+        firstWeeksMonthsTotals.push( firstWeekExpensesTotal );
     }
     
     result = getArrMedian( firstWeeksMonthsTotals )
- 
+
     return result;
 }
-
-solution1( expenses )
 
 function solution2(expenses) {
-    result = null;
-    // ...
-    return result;
+        result = null;
+
+        function getTotalExpenses(dayExpenses) {
+            let totalDayExpense = 0;
+
+            for (const expensesCategoryName in dayExpenses) {
+                const expensesArr = dayExpenses[expensesCategoryName];
+                totalDayExpense += expensesArr.reduce(
+                    (sumExpenses, val) => (sumExpenses += val), 0 );
+            }
+
+            return Number(totalDayExpense.toFixed(2));
+        }
+
+        function getArrMedian(arr) {
+            const sortedArr = arr.sort();
+
+            if (!arr.length) return;
+            if (arr.length % 2 !== 0)
+                return sortedArr[(sortedArr.length + 1) / 2];
+
+            let sumMiddleValues =
+                sortedArr[sortedArr.length / 2] +
+                sortedArr[sortedArr.length / 2 - 1];
+            return sumMiddleValues / 2;
+        }
+
+        const firstWeeksMonthsTotals = [];
+        for (const [month, days] of Object.entries(expenses)) {
+            let firstWeekExpensesTotal = 0;
+
+            for (const [day, dayExp] of Object.entries(days)) {
+                const fullDate = `${month}-${day}`;
+                const weekDay = new Date(fullDate).getDay();
+
+                if (Number(day) > 7) break;
+                firstWeekExpensesTotal += getTotalExpenses(dayExp);
+                if (weekDay === 0) break;
+            }
+
+            firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
+        }
+
+        result = getArrMedian(firstWeeksMonthsTotals);
+
+        return result;
 }
+
+console.log( 
+    solution1( expenses ),
+    solution2( expenses )
+)

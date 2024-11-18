@@ -21,12 +21,11 @@ const expenses = {
     "2023-04": {},
 };
 
-
 function solution1(expenses) {
     result = null;
 
     function getTotalExpenses(dayExpenses) {
-        let totalDayExpense = 0;
+        let totalDayExpense = null;
 
         for (const expensesCategoryName in dayExpenses) {
             const expensesArr = dayExpenses[expensesCategoryName];
@@ -42,26 +41,24 @@ function solution1(expenses) {
         const sortedArr = [];
 
         for (const el of arr) {
-            if ( sortedArr.length === 0 ) sortedArr.push(el);
+            if (sortedArr.length === 0) sortedArr.push(el);
             else {
-                for (let i = 0; i < sortedArr.length ; i++) {
+                for (let i = 0; i < sortedArr.length; i++) {
                     if (sortedArr[i] > el) {
-                        sortedArr.splice(i, 0, el); 
+                        sortedArr.splice(i, 0, el);
                         break;
                     }
 
-                    if (sortedArr.length-1 === i) {
-                        sortedArr.push( el )
+                    if (sortedArr.length - 1 === i) {
+                        sortedArr.push(el);
                         break;
-                    } 
+                    }
                 }
             }
         }
 
-        console.log(sortedArr);
         return sortedArr;
     }
-
 
     function getArrMedian(arr) {
         const sortedArr = sortedArrValues(arr);
@@ -90,8 +87,11 @@ function solution1(expenses) {
             firstWeekExpensesTotal += getTotalExpenses(dayExp);
             if (weekDay === 0) break;
         }
-        firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
+        
+        if (firstWeekExpensesTotal) 
+            firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
     }
+
 
     result = getArrMedian(firstWeeksMonthsTotals);
     return result;
@@ -143,10 +143,10 @@ function solution2(expenses) {
             firstWeekExpensesTotal += getTotalExpenses(dayExp);
             if (weekDay === 0) break;
         }
-        firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
+         if (firstWeekExpensesTotal)
+             firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
     }
 
     result = getArrMedian(firstWeeksMonthsTotals);
     return result;
 }
-

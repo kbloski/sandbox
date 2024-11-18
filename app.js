@@ -120,7 +120,7 @@ function solution2(expenses) {
             return 0;
         });
 
-        if (!arr.length) return;
+        if (!arr.length) return null;
         if (arr.length % 2 !== 0)
             return sortedArr[Math.floor(sortedArr.length / 2)];
 
@@ -150,3 +150,8 @@ function solution2(expenses) {
     result = getArrMedian(firstWeeksMonthsTotals);
     return result;
 }
+
+console.log( 
+    solution1(expenses),
+    solution2( expenses)
+)

@@ -37,11 +37,18 @@ function solution1(expenses) {
     }
 
     function getArrMedian( arr ){
-        const sortedArr = 
+        const sortedArr = arr.sort();
+        
+        if (!arr.lenght) return;
+        if (arr.lenght % 2 !== 0 ) return sortedArr[sortedArr.length / 2];
+        
+        let sumMiddleValues = sortedArr[sortedArr.length / 2] +  sortedArr[sortedArr.length / 2 - 1]
+        return sumMiddleValues / 2
+       
     }
 
     const firstWeeksMonthsTotals = [];
-    for (const [month, days] of Object.entries( expenses)){
+    for (const days of Object.values( expenses)){
         let firstWeekExpenses = 0;
 
         for(const [day, dayExp] of Object.entries(days)){
@@ -50,14 +57,14 @@ function solution1(expenses) {
 
             if ( Number(day) > 7) break;
             firstWeekExpenses += getTotalExpenses( dayExp )
-            if ( weekDay == 0) break;
+            if ( weekDay == =0) break;
         }
 
         firstWeeksMonthsTotals.push( firstWeekExpenses );
     }
     
-
-
+    result = getArrMedian( firstWeeksMonthsTotals )
+ 
     return result;
 }
 

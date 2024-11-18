@@ -21,24 +21,9 @@ const expenses = {
     "2023-04": {},
 };
 
-// 185.62.
 
 function solution1(expenses) {
     result = null;
-
-    function getTotalExpenses(dayExpenses) {
-        let totalDayExpense = null;
-
-        for (const expensesCategoryName in dayExpenses) {
-            const expensesArr = dayExpenses[expensesCategoryName];
-
-            expensesArr.forEach((e) => {
-                totalDayExpense += Number(e);
-            });
-        }
-        return Number(totalDayExpense.toFixed(2));
-    }
-
     function sortedArrValues(arr) {
         const sortedArr = [];
 
@@ -75,56 +60,39 @@ function solution1(expenses) {
         return sumMiddleValues / 2;
     }
 
-    function dayIsInFirstWeek( dayNr, weekDay ){
-        return weekDay+1 - Number(dayNr) >= 0;
+    function isDayInFirstWeek(dayNr, weekDay) {
+        return weekDay + 1 - Number(dayNr) >= 0;
     }
 
-    const firstWeeksMonthsTotals = [];
+    const allExpensesFirstWeeks = [];
     for (const [month, days] of Object.entries(expenses)) {
-        let firstWeekExpensesTotal = 0;
+        for (const [day, categoriesExpenses] of Object.entries(days)) {
+            const date = new Date(`${month}-${day}`);
 
-        for (const [day, dayExp] of Object.entries(days)) {
-            const fullDate = `${month}-${day}`;
-            const weekDay = new Date(fullDate).getDay();
+            if (Number(day) > 7 || !isDayInFirstWeek(day, date.getDay()))
+                continue;
 
-
-            if (
-                Number(day) > 7 ||
-                !dayIsInFirstWeek( day, weekDay) 
-            ) continue;
-            firstWeekExpensesTotal += getTotalExpenses(dayExp);
+            for (const categoryName in categoriesExpenses) {
+                const cateogryExpenses = categoriesExpenses[categoryName];
+                allExpensesFirstWeeks.push(...cateogryExpenses);
+            }
         }
-        
-        if (firstWeekExpensesTotal) 
-            firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
     }
 
-
-    result = getArrMedian(firstWeeksMonthsTotals);
+    result = getArrMedian(allExpensesFirstWeeks);
     return result;
 }
 
 function solution2(expenses) {
+    // Funkcja działa tylko dla standardowego 7 dniowego tygodnia.
+    // Nie posiada validacji danych
+    
+
     result = null;
-
-    function getTotalExpenses(dayExpenses) {
-        let totalDayExpense = 0;
-
-        for (const expensesCategoryName in dayExpenses) {
-            const expensesArr = dayExpenses[expensesCategoryName];
-            totalDayExpense += expensesArr.reduce(
-                (sumExpenses, val) => (sumExpenses += val),
-                0
-            );
-        }
-        return Number(totalDayExpense.toFixed(2));
-    }
 
     function getArrMedian(arr) {
         const sortedArr = arr.sort((a, b) => {
-            if (a > b) return 1;
-            else if (a < b) return -1;
-            return 0;
+            return a - b;
         });
 
         if (!arr.length) return null;
@@ -138,33 +106,26 @@ function solution2(expenses) {
         return sumMiddleValues / 2;
     }
 
-    function dayIsInFirstWeek(dayNr, weekDay) {
+    function isDayInFirstWeek(dayNr, weekDay) {
         return weekDay + 1 - Number(dayNr) >= 0;
     }
 
-    const firstWeeksMonthsTotals = [];
+    const allExpensesFirstWeeks = [];
     for (const [month, days] of Object.entries(expenses)) {
-        let firstWeekExpensesTotal = 0;
+        for (const [day, categoriesExpenses] of Object.entries(days)) {
+            const date = new Date(`${month}-${day}`);
 
-        for (const [day, dayExp] of Object.entries(days)) {
-            const fullDate = `${month}-${day}`;
-            const weekDay = new Date(fullDate).getDay();
+            if (Number(day) > 7) continue;
+            if (!isDayInFirstWeek(day, date.getDay())) continue;
 
-            if (
-                Number(day) > 7 ||
-                !dayIsInFirstWeek( day, weekDay) 
-            ) continue;
-            firstWeekExpensesTotal += getTotalExpenses(dayExp);
+            for (const categoryName in categoriesExpenses) {
+                const cateogryExpenses = categoriesExpenses[categoryName];
+                allExpensesFirstWeeks.push(...cateogryExpenses);
+            }
         }
-         if (firstWeekExpensesTotal)
-             firstWeeksMonthsTotals.push(firstWeekExpensesTotal);
     }
 
-    result = getArrMedian(firstWeeksMonthsTotals);
+    result = getArrMedian(allExpensesFirstWeeks);
     return result;
 }
 
-console.log( 
-    solution1( expenses),
-    solution2(expenses)
-)
